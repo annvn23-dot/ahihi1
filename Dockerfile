@@ -6,12 +6,12 @@ COPY . .
 
 RUN mvn clean package -DskipTests
 
-FROM eclipse-temurin:21-jre
+FROM tomcat:10.1-jdk21-temurin
 
-WORKDIR /app
+RUN rm -rf /usr/local/tomcat/webapps/*
 
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build /app/target/ManagerPark-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
 
 EXPOSE 8080
 
-ENTRYPOINT ["java","-jar","app.jar"]
+CMD ["catalina.sh","run"]
